@@ -1,11 +1,18 @@
-import { View, Text, StyleSheet, SafeAreaView, Pressable } from "react-native";
+import { View, Text, StyleSheet, SafeAreaView } from "react-native";
 import QuestionCard from "../components/QuestionCard";
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import questions from "../questions";
+import Card from "../components/Card";
+import CustomButton from "../components/CustomButton";
+import { useState } from "react";
 
 export default function QuizScreen() {
+    const [questionIndex, setQuestionIndex] = useState(0);
+    const question = questions[questionIndex];
 
-    const question = questions[0];
+    const onNext = () => {
+        setQuestionIndex((currValue) => currValue + 1);
+    }
 
     return(
         <SafeAreaView style={styles.page}>
@@ -18,25 +25,30 @@ export default function QuizScreen() {
                 </View>
 
                 { /* Body */ }
-                <View>
-                    <QuestionCard question={question} />
-                    <Text style={styles.time}>20 sec</Text>
-                </View>
+                {question ? (
+                    <View>
+                        <QuestionCard question={question} />
+                        <Text style={styles.time}>20 sec</Text>
+                    </View>
+                ) : (
+                    <Card title="Well Done!">
+                        <Text>Correct Answers: 3/5</Text>
+                    </Card>
+                )}
+
                 { /* Footer */ }
 
-                <Pressable
-                    onPress={() => console.warn("Pressed!")}
-                    onLongPress={() => console.warn("LONG PRESS!")}
-                    style={styles.button}
-                >
-                    <Text style={styles.buttonText}>Next</Text>
-                    <FontAwesome6
-                        name="arrow-right-long"
-                        size={16}
-                        color="white"
-                        style={styles.buttonIcon}
-                    />
-                </Pressable>
+                <CustomButton
+                    title="Next"
+                    rightIcon={
+                        <FontAwesome6
+                            name="arrow-right-long"
+                            size={16}
+                            color="white"
+                            style={styles.buttonIcon}
+                    />}
+                    onPress={onNext}
+                />
             </View>
         </SafeAreaView>
     )

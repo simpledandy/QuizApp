@@ -1,6 +1,8 @@
 import { StyleSheet, Text, View } from "react-native";
 import AnswerOption from "./AnswerOption";
 import { Question } from "../types";
+import Card from "./Card";
+import { useState } from "react";
 
 type QuestionCard = {
     question: Question;
@@ -8,37 +10,28 @@ type QuestionCard = {
 
 export default function QuestionCard({question}: QuestionCard) {
 
-    const onOptionSelected = (option: string) => {
-        console.warn("Selected: ", option);
-    }
+    const [selectedOption, setSelectedOption] = useState<string | undefined>();
 
-    const selectedOption = question.options[0];
+    const onOptionSelected = (option: string) => {
+        setSelectedOption(option);
+    }
 
     return(
         <View style={styles.questionCard}>
+
             <Text style={styles.question}>{question.title}</Text>
 
             <View style={{gap: 10}}>
+
+                {question.options.map( (option) =>
                 <AnswerOption
-                    option={question.options[0]}
-                    isSelected={question.options[0] === selectedOption}
-                    onPress={() => onOptionSelected(question.options[0])}
-                />
-                <AnswerOption
-                    option={question.options[1]}
-                    isSelected={question.options[1] === selectedOption}
-                    onPress={() => onOptionSelected(question.options[1])}
-                />
-                <AnswerOption
-                    option={question.options[2]}
-                    isSelected={question.options[2] === selectedOption}
-                    onPress={() => onOptionSelected(question.options[2])}
-                />
-                <AnswerOption
-                    option={question.options[3]}
-                    isSelected={question.options[3] === selectedOption}
-                    onPress={() => onOptionSelected(question.options[3])}
-                />
+                    key={option}
+                    option={option}
+                    isSelected={option === selectedOption}
+                    onPress={() => onOptionSelected(option)}
+                /> )}
+
+                
             </View>
         </View>
     )
